@@ -1,0 +1,9 @@
+{
+    "name": "wetube",
+    "version": "0.0.1",
+    "description": "Watch YouTube videos together, either in the same room or in different locations",
+    "dependencies": {
+        "express": "^4.10.2",
+        "socket.io": "^1.3.6"
+    }
+}
