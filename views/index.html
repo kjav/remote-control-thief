@@ -2,8 +2,39 @@
     <head>
         <title>WeTube</title>
         <style type='text/css'>
+            body {
+                font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            }
+            
             #container {
                 margin: 0 auto;
+                width: 900px;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            #video {
+                margin: 0 auto;
+                display: block;
+            }
+
+            #controls {
+                float: left;
+                width: 250px;
+                margin: 12px;
+            }
+
+            #chatbox-container {
+                width: 100%;
+            }
+
+            #chatbox {
+                margin: 12px;
+                border: 1px solid #d0d0d0;
+                overflow-y: scroll;
+                height: 200px;
             }
         </style>
         <script src='https://cdn.socket.io/socket.io-1.3.5.js'></script>
@@ -48,14 +79,17 @@
             <div id='controls'>
                 <p>Video ID: <input type='text' id='video-id-to-send' /></p>
                 <button id='send-video-button'>Submit video</button>
+                <div id='message-preparation'>
+                    <p>Username: <input type='text' id='username' /></p>
+                    <p>Message: <input type='text' id='message-to-send' /></p>
+                    <button id='send-message-button'>Send message</button>
+                </div>
             </div>
 
-            <div id='chatbox'>
-            </div>
-            <div id='chatbox-controller'>
-                <p>Username: <input type='text' id='username' /></p>
-                <p>Message: <input type='text' id='message-to-send' /></p>
-                <button id='send-message-button'>Send message</button>
+            <div id='chatbox-container'>
+                <div id='chatbox'>
+                    <p>La la la</p>
+                </div>
             </div>
         </div>
     </body>
