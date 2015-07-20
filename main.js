@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var users = []
+var users = [];
+var apiKey = require('./api.json').api_key;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -26,6 +27,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('add video', function(videoData) {
+        console.log('A video with name ' + videoData.name + ' has been submitted.');
         io.emit('add video', videoData);
     });
 

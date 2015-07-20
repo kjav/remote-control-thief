@@ -56,7 +56,7 @@
 
             socket.on('add video', function(videoData) {
                 videoQueue.push(videoData);
-                loadNewVideo();
+                updatePlaylist();
             });
 
             socket.on('play video', function(playData) {
@@ -78,6 +78,13 @@
                 $('#chatbox').append('<p>' + message + '</p>');
                 $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
             }
+
+            function updatePlaylist() {
+                $('#playlist').html('');
+                $.each(videoQueue, function(key, video) {
+                    $('#playlist').append('<div class="playlist-item">' + video.name + ' (' + video.id + ')</div>');
+                });
+            }
         </script>
     </head>
     <body>
@@ -85,8 +92,6 @@
             <h1>WeTube</h1>
 
             <div id='viewer-container'>
-                <!-- <iframe id='video' width='560' height='315' src='https://www.youtube.com/embed/QzQkpCX5pMU' frameborder='0' allowfullscreen='true'></iframe> -->
-
                 <div id='player'></div>
 
                 <span id='playlist'>
