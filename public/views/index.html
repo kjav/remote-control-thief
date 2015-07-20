@@ -82,7 +82,7 @@
             function updatePlaylist() {
                 $('#playlist').html('');
                 $.each(videoQueue, function(key, video) {
-                    $('#playlist').append('<div class="playlist-item">' + video.name + ' (' + video.id + ')</div>');
+                    $('#playlist').append('<div class="playlist-item">' + video.title + '</div>');
                 });
             }
         </script>

@@ -1,13 +1,15 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var https = require('https');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var users = [];
+var videos = [];
 var apiKey = require('./api.json').api_key;
 
 app.use(express.static(__dirname + '/public'));
 
-http.listen(3000, function() {
+server.listen(3000, function() {
     console.log('Listing on port 3000');
 });
 
@@ -27,8 +29,8 @@ io.on('connection', function(socket) {
     });
 
     socket.on('add video', function(videoData) {
-        console.log('A video with name ' + videoData.name + ' has been submitted.');
-        io.emit('add video', videoData);
+        // io.emit('add video', videoData);
+        retrieveVideoInformation(videoData.id);
     });
 
     socket.on('play video', function(playData) {
@@ -41,3 +43,31 @@ io.on('connection', function(socket) {
         io.emit('pause video', pauseData);
     });
 });
+
+function retrieveVideoInformation(videoID) {
+    var options = {
+        host: 'www.googleapis.com',
+        path: '/youtube/v3/videos?part=snippet&id=' + videoID + '&key=' + apiKey
+    }
+
+    callback = function(response) {
+        var str = '';
+
+        response.on('data', function(chunk) {
+            str += chunk;
+        });
+
+        response.on('end', function() {
+            responseData = JSON.parse(str);
+            addVideoAndEmit(responseData.items[0].snippet);
+        });
+    }
+
+    https.request(options, callback).end();
+}
+
+function addVideoAndEmit(videoData) {
+    videos.push(videoData);
+    console.log('A video with name ' + videoData.title + ' has been submitted.');
+    io.emit('add video', videoData);
+}
