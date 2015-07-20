@@ -23,7 +23,12 @@
             }
 
             function onPlayerStateChange(event) {
-
+                if (event.data == YT.PlayerState.PLAYING) {
+                    requestToPlayVideo();
+                }
+                else if (event.data == YT.PlayerState.PAUSED) {
+                    requestToPauseVideo();
+                }
             }
 
             function onPlayerReady(event) {
@@ -42,11 +47,11 @@
                 });
 
                 $('#play-video-button').click(function() {
-                    socket.emit('play video', { username: $('#username').val() });
+                    requestToPlayVideo();
                 });
 
                 $('#pause-video-button').click(function() {
-                    socket.emit('pause video', { username: $('#username').val() });
+                    requestToPauseVideo();
                 });
             });
 
@@ -72,6 +77,14 @@
             function loadNewVideo() {
                 newVideoData = videoQueue.shift();
                 $('#video').attr('src', 'https://www.youtube.com/embed/' + newVideoData.id);
+            }
+
+            function requestToPlayVideo() {
+                socket.emit('play video', { username: $('#username').val() });
+            }
+
+            function requestToPauseVideo() {
+                socket.emit('pause video', { username: $('#username').val() });
             }
 
             function appendMessageToChatbox(message) {
