@@ -1,0 +1,71 @@
+body {
+    font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+#container {
+    margin: 0 auto;
+    width: 900px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#viewer-container {
+    display: flex;
+    justify-content: center;
+}
+
+#player {
+    margin: 12px;
+}
+
+#playlist {
+    height: 315px;
+    border: 1px solid #f0f0f0;
+    width: 200px;
+    margin: 12px;
+}
+
+.playlist-item {
+    padding: 12px;
+}                
+
+.playlist-item:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+
+hr {
+    clear: both;
+    border: none;
+    border-top: 1px solid #f0f0f0;
+}
+
+#controls-container {
+    display: flex;
+}
+
+#controls {
+    width: 300px;
+    margin: 12px;
+}
+
+#chatbox-container {
+    width: 100%;
+}
+
+#chatbox {
+    margin: 12px;
+    border: 1px solid #f0f0f0;
+    overflow-y: scroll;
+    height: 200px;
+}
+
+#chatbox p {
+    padding: 12px;
+    margin: 0;
+}
+
+#chatbox p:nth-child(odd) {
+    background-color: #f0f0f0;
+}
