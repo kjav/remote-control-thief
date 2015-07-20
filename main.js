@@ -29,7 +29,6 @@ io.on('connection', function(socket) {
     });
 
     socket.on('add video', function(videoData) {
-        // io.emit('add video', videoData);
         retrieveVideoInformation(videoData.id);
     });
 
@@ -59,7 +58,7 @@ function retrieveVideoInformation(videoID) {
 
         response.on('end', function() {
             responseData = JSON.parse(str);
-            addVideoAndEmit(responseData.items[0].snippet);
+            addVideoAndEmit(responseData.items[0]);
         });
     }
 

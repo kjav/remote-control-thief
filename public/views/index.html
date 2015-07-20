@@ -14,7 +14,7 @@
                 player = new YT.Player('player', {
                     height: '315',
                     width: '560',
-                    videoId: 'M7lc1UVf-VE',
+                    videoId: 'g7Lzr3cwaPs',
                     events: {
                         'onReady': onPlayerReady,
                         'onStateChange': onPlayerStateChange
@@ -29,6 +29,9 @@
                 else if (event.data == YT.PlayerState.PAUSED) {
                     requestToPauseVideo();
                 }
+                else if (event.data == YT.PlayerState.ENDED) {
+                    loadNextVideo();
+                }
             }
 
             function onPlayerReady(event) {
@@ -42,7 +45,7 @@
                 });
 
                 $('#send-video-button').click(function() {
-                    var videoData = { id: $('#video-id-to-send').val(), name: 'Blah' };
+                    var videoData = { id: $('#video-id-to-send').val() };
                     socket.emit('add video', videoData);
                 });
 
@@ -74,9 +77,10 @@
                 player.pauseVideo();
             });
 
-            function loadNewVideo() {
+            function loadNextVideo() {
                 newVideoData = videoQueue.shift();
-                $('#video').attr('src', 'https://www.youtube.com/embed/' + newVideoData.id);
+                alert(newVideoData.id);
+                player.loadVideoById(newVideoData.id);
             }
 
             function requestToPlayVideo() {
@@ -95,7 +99,7 @@
             function updatePlaylist() {
                 $('#playlist').html('');
                 $.each(videoQueue, function(key, video) {
-                    $('#playlist').append('<div class="playlist-item">' + video.title + '</div>');
+                    $('#playlist').append('<div class="playlist-item">' + video.snippet.title + '</div>');
                 });
             }
         </script>
@@ -108,21 +112,6 @@
                 <div id='player'></div>
 
                 <span id='playlist'>
-                    <div class='playlist-item'>
-                        Video name
-                    </div>
-                    <div class='playlist-item'>
-                        Video name
-                    </div>
-                    <div class='playlist-item'>
-                        Video name
-                    </div>
-                    <div class='playlist-item'>
-                        Video name
-                    </div>
-                    <div class='playlist-item'>
-                        Video name
-                    </div>
                 </span>
             </div>
 
