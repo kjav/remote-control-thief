@@ -6,12 +6,13 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '315',
         width: '560',
-        videoId: 'g7Lzr3cwaPs',
+        videoId: videoQueue[0].id,
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
     });
+    // loadNextVideo();
 }
 
 function onPlayerStateChange(event) {
@@ -22,13 +23,17 @@ function onPlayerStateChange(event) {
         requestToPauseVideo();
     }
     else if (event.data == YT.PlayerState.ENDED) {
+        emitVideoEnded(videoQueue[0]);
         loadNextVideo();
     }
-    alert('Blah');
 }
 
 function onPlayerReady(event) {
     // event.target.playVideo();
+}
+
+function emitVideoEnded(videoData) {
+    socket.emit('video ended', videoData);
 }
 
 $(document).ready(function() {
@@ -70,10 +75,16 @@ socket.on('pause video', function(playData) {
     player.pauseVideo();
 });
 
+socket.on('load video queue', function(videoQueueToLoad) {
+    videoQueue = videoQueueToLoad;
+    updatePlaylist();
+});
+
 function loadNextVideo() {
-    newVideoData = videoQueue.shift();
-    alert(newVideoData.id);
+    videoQueue.shift();
+    newVideoData = videoQueue[0];
     player.loadVideoById(newVideoData.id);
+    updatePlaylist();
 }
 
 function requestToPlayVideo() {

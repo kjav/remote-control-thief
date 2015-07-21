@@ -9,6 +9,8 @@ var apiKey = require('./api.json').api_key;
 
 app.use(express.static(__dirname + '/public'));
 
+loadDefaultVideo();
+
 server.listen(3000, function() {
     console.log('Listing on port 3000');
 });
@@ -19,6 +21,8 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
     console.log('A user has connected.');
+
+    socket.emit('load video queue', videos);
     
     socket.on('disconnect', function() {
         console.log('A user has disconnected.');
@@ -40,6 +44,13 @@ io.on('connection', function(socket) {
     socket.on('pause video', function(pauseData) {
         console.log(pauseData.username + ' has requested to pause the video');
         io.emit('pause video', pauseData);
+    });
+
+    socket.on('video ended', function(videoData) {
+        if (videos[0].uniqueID == videoData.uniqueID) {
+            videos.shift();
+            console.log(videos.length);
+        }
     });
 });
 
@@ -66,7 +77,22 @@ function retrieveVideoInformation(videoID) {
 }
 
 function addVideoAndEmit(videoData) {
+    videoData.uniqueID = guid();
     videos.push(videoData);
-    console.log('A video with name ' + videoData.title + ' has been submitted.');
+    console.log('A video with name ' + videoData.snippet.title + ' has been submitted.');
     io.emit('add video', videoData);
+}
+
+function loadDefaultVideo() {
+    defaultVideoData = retrieveVideoInformation('sjCw3-YTffo');
+}
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
 }
