@@ -24,6 +24,11 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
     console.log('A user has connected.');
 
+    if (!videoIsPaused) {
+        var currentTime = Math.floor(Date.now() / 1000);
+        videos[0].timeIntoVideo += (currentTime - timeAtWhichVideoWasMostRecentlyStarted);
+        timeAtWhichVideoWasMostRecentlyStarted = Math.floor(Date.now() / 1000);
+    }
     socket.emit('load video queue', videos);
     
     socket.on('disconnect', function() {
@@ -104,7 +109,7 @@ function emitVideo(videoData) {
 }
 
 function loadDefaultVideo() {
-    defaultVideoData = retrieveVideoInformation('sjCw3-YTffo');
+    retrieveVideoInformation('sjCw3-YTffo');
 }
 
 function guid() {

@@ -16,7 +16,9 @@ function attemptToLoadFirstVideo() {
         player = new YT.Player('player', {
             height: '315',
             width: '560',
-            videoId: videoQueue[0].id,
+            playerVar: {
+                'autoplay': 1
+            },
             events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onPlayerStateChange
@@ -39,7 +41,10 @@ function onPlayerStateChange(event) {
 }
 
 function onPlayerReady(event) {
-    // event.target.playVideo();
+    event.target.loadVideoById({
+        videoId: videoQueue[0].id,
+        startSeconds: videoQueue[0].timeIntoVideo
+    });
 }
 
 function emitVideoEnded(videoData) {
