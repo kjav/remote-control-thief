@@ -3,9 +3,11 @@ var app = express();
 var https = require('https');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var apiKey = require('./api.json').api_key;
 var users = [];
 var videos = [];
-var apiKey = require('./api.json').api_key;
+var timeAtWhichVideoWasMostRecentlyStarted;
+var videoIsPaused = true;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -37,19 +39,31 @@ io.on('connection', function(socket) {
     });
 
     socket.on('play video', function(playData) {
-        console.log(playData.username + ' has requested to play the video');
-        io.emit('play video', playData);
+        if (videoIsPaused) {
+            console.log(playData.username + ' has requested to play the video');
+            videoIsPaused = false;
+            timeAtWhichVideoWasMostRecentlyStarted = Math.floor(Date.now() / 1000);
+            io.emit('play video', playData);
+            console.log('A user has clicked to play the video at time ' + timeAtWhichVideoWasMostRecentlyStarted + ' at time ' + videos[0].timeIntoVideo + ' into the video');
+        }
     });
 
     socket.on('pause video', function(pauseData) {
-        console.log(pauseData.username + ' has requested to pause the video');
-        io.emit('pause video', pauseData);
+        if (!videoIsPaused) {
+            console.log(pauseData.username + ' has requested to pause the video');
+            var currentTime = Math.floor(Date.now() / 1000);
+            videos[0].timeIntoVideo += (currentTime - timeAtWhichVideoWasMostRecentlyStarted);
+            videoIsPaused = true;
+            io.emit('pause video', pauseData);
+            console.log('A user has clicked to pause the video at time ' + timeAtWhichVideoWasMostRecentlyStarted + ' at time ' + videos[0].timeIntoVideo + ' into the video');
+        }
     });
 
     socket.on('video ended', function(videoData) {
         if (videos[0].uniqueID == videoData.uniqueID) {
             videos.shift();
-            console.log(videos.length);
+            videoIsPaused = true;
+            videos[0].timeIntoVideo = 0;
         }
     });
 });
@@ -69,17 +83,23 @@ function retrieveVideoInformation(videoID) {
 
         response.on('end', function() {
             responseData = JSON.parse(str);
-            addVideoAndEmit(responseData.items[0]);
+            var videoData = addVideoAndReturn(responseData.items[0]);
+            emitVideo(videoData);
         });
     }
 
     https.request(options, callback).end();
 }
 
-function addVideoAndEmit(videoData) {
+function addVideoAndReturn(videoData) {
     videoData.uniqueID = guid();
+    videoData.timeIntoVideo = 0;
     videos.push(videoData);
     console.log('A video with name ' + videoData.snippet.title + ' has been submitted.');
+    return videoData;
+}
+
+function emitVideo(videoData) {
     io.emit('add video', videoData);
 }
 
