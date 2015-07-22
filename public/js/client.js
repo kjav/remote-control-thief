@@ -2,17 +2,27 @@ var socket = io();
 var videoQueue = [];
 
 var player;
+
+var isYouTubeIframeAPIReady = false;
+var hasVideoQueueLoaded = false;
+
 function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '315',
-        width: '560',
-        videoId: videoQueue[0].id,
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-    // loadNextVideo();
+    isYouTubeIframeAPIReady = true;
+    attemptToLoadFirstVideo();
+}
+
+function attemptToLoadFirstVideo() {
+    if (isYouTubeIframeAPIReady && hasVideoQueueLoaded) {
+        player = new YT.Player('player', {
+            height: '315',
+            width: '560',
+            videoId: videoQueue[0].id,
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
 }
 
 function onPlayerStateChange(event) {
@@ -78,6 +88,8 @@ socket.on('pause video', function(playData) {
 socket.on('load video queue', function(videoQueueToLoad) {
     videoQueue = videoQueueToLoad;
     updatePlaylist();
+    hasVideoQueueLoaded = true;
+    attemptToLoadFirstVideo();
 });
 
 function loadNextVideo() {
