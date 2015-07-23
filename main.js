@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var expressHbs = require('express-handlebars');
 var https = require('https');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -9,7 +10,9 @@ var videos = [];
 var timeAtWhichVideoWasMostRecentlyStarted;
 var videoIsPaused = true;
 
-app.use(express.static(__dirname + '/public'));
+app.engine('hbs', expressHbs({extname:'hbs'}));
+app.set('view engine', 'hbs');
+app.use(express.static(__dirname));
 
 loadDefaultVideo();
 
@@ -18,19 +21,19 @@ server.listen(3000, function() {
 });
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/public/views/choose_mode.html');
+    res.sendFile(__dirname + '/views/choose_mode.html');
 });
 
 app.get('/watch', function(req, res) {
-    res.sendFile(__dirname + '/public/views/index.html');
+    res.render('index', { watch: true, control: false });
 });
 
 app.get('/control', function(req, res) {
-    res.sendFile(__dirname + '/public/views/index.html');
+    res.render('index', { watch: false, control: true });
 });
 
 app.get('/watch/and/control', function(req, res) {
-    res.sendFile(__dirname + '/public/views/index.html');
+    res.render('index', { watch: true, control: true });
 });
 
 io.on('connection', function(socket) {
