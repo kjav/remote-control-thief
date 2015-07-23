@@ -12,7 +12,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function attemptToLoadFirstVideo() {
-    if (isYouTubeIframeAPIReady && hasVideoQueueLoaded) {
+    if (isYouTubeIframeAPIReady && hasVideoQueueLoaded && isWatchSet) {
         player = new YT.Player('player', {
             height: '315',
             width: '560',
@@ -82,12 +82,18 @@ socket.on('add video', function(videoData) {
 
 socket.on('play video', function(playData) {
     appendMessageToChatbox(playData.username + ' has clicked to play the video.');
-    player.playVideo();
+
+    if (isWatchSet) {
+        player.playVideo();
+    }
 });
 
 socket.on('pause video', function(playData) {
     appendMessageToChatbox(playData.username + ' has clicked to pause the video.');
-    player.pauseVideo();
+
+    if (isWatchSet) {
+        player.pauseVideo();
+    }
 });
 
 socket.on('load video queue', function(videoQueueToLoad) {
@@ -99,8 +105,12 @@ socket.on('load video queue', function(videoQueueToLoad) {
 
 function loadNextVideo() {
     videoQueue.shift();
-    newVideoData = videoQueue[0];
-    player.loadVideoById(newVideoData.id);
+
+    if (isWatchSet) {
+        newVideoData = videoQueue[0];
+        player.loadVideoById(newVideoData.id);
+    }
+
     updatePlaylist();
 }
 
