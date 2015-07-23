@@ -3,6 +3,11 @@
     <head>
         <title>Remote Control Thief</title>
         <link rel='stylesheet' type='text/css' href='/stylesheets/style.css'>
+        {{#if watch}}
+            <link rel='stylesheet' type='text/css' href='/stylesheets/watch-viewer.css'>
+        {{else}}
+            <link rel='stylesheet' type='text/css' href='/stylesheets/control-only-viewer.css'>
+        {{/if}}
         <script type='text/javascript'>
             isControlSet = {{control}};
             isWatchSet = {{watch}};
@@ -18,7 +23,9 @@
             <h1>Remote Control Thief{{title}}</h1>
 
             <div id='viewer-container'>
-                <div id='player'></div>
+                {{#if watch}}
+                    <div id='player'></div>
+                {{/if}}
 
                 <span id='playlist'>
                 </span>

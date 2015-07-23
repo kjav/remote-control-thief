@@ -1,0 +1,14 @@
+#playlist {
+    height: 315px;
+    border: 1px solid #f0f0f0;
+    width: 200px;
+    margin: 12px;
+}
+
+.playlist-item {
+    padding: 12px;
+}                
+
+.playlist-item:nth-child(odd) {
+    background-color: #f0f0f0;
+}
