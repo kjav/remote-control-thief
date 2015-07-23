@@ -18,6 +18,18 @@ server.listen(3000, function() {
 });
 
 app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/public/views/choose_mode.html');
+});
+
+app.get('/watch', function(req, res) {
+    res.sendFile(__dirname + '/public/views/index.html');
+});
+
+app.get('/control', function(req, res) {
+    res.sendFile(__dirname + '/public/views/index.html');
+});
+
+app.get('/watch/and/control', function(req, res) {
     res.sendFile(__dirname + '/public/views/index.html');
 });
 
