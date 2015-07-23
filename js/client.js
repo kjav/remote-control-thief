@@ -103,6 +103,14 @@ socket.on('load video queue', function(videoQueueToLoad) {
     attemptToLoadFirstVideo();
 });
 
+socket.on('video ended', function(videoData) {
+    if (!isWatchSet) {
+        if (videoData.uniqueID == videoQueue[0].uniqueID) {
+            loadNextVideo();
+        }
+    }
+});
+
 function loadNextVideo() {
     videoQueue.shift();
 

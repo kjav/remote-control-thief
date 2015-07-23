@@ -84,6 +84,8 @@ io.on('connection', function(socket) {
             videos.shift();
             videoIsPaused = true;
             videos[0].timeIntoVideo = 0;
+
+            io.emit('video ended', videoData);
         }
     });
 });
