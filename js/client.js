@@ -100,6 +100,13 @@ function appendMessageToChatbox(message) {
     $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
 }
 
+function loadSearchResults(searchResults) {
+    $('#search-results').html('');
+    $.each(searchResults, function(key, searchResult) {
+        $('#search-results').append('<div class="search-result">' + searchResult.snippet.title + '</div>');
+    });
+}
+
 function updatePlaylist() {
     $('#playlist').html('');
     $.each(videoQueue, function(key, video) {

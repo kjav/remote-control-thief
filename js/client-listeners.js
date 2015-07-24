@@ -37,3 +37,7 @@ socket.on('video ended', function(videoData) {
         }
     }
 });
+
+socket.on('send search results', function(searchResults) {
+    loadSearchResults(searchResults);
+});

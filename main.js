@@ -91,7 +91,7 @@ io.on('connection', function(socket) {
 
     socket.on('search youtube', function(searchQuery) {
         var searchString = searchQuery.searchString;
-        searchYoutubeForString(searchString);
+        searchYoutubeForString(socket, searchString);
     });
 });
 
@@ -118,6 +118,30 @@ function retrieveVideoInformation(videoID) {
     https.request(options, callback).end();
 }
 
+function searchYoutubeForString(userSocket, searchString) {
+    console.log('A user has requested to search YouTube for "' + searchString + '"');
+    
+    var options = {
+        host: 'www.googleapis.com',
+        path: '/youtube/v3/search?part=snippet&q=' + encodeURIComponent(searchString) + '&key=' + apiKey
+    }
+
+    callback = function(response) {
+        var str = '';
+
+        response.on('data', function(chunk) {
+            str += chunk;
+        });
+
+        response.on('end', function() {
+            responseData = JSON.parse(str);
+            userSocket.emit('send search results', responseData.items);
+        });
+    }
+
+    https.request(options, callback).end();
+}
+
 function addVideoAndReturn(videoData) {
     videoData.uniqueID = guid();
     videoData.timeIntoVideo = 0;
@@ -132,10 +156,6 @@ function emitVideo(videoData) {
 
 function loadDefaultVideo() {
     retrieveVideoInformation('sjCw3-YTffo');
-}
-
-function searchYoutubeForString(searchString) {
-    console.log('A user has searched YouTube for "' + searchString + '"');
 }
 
 function guid() {
