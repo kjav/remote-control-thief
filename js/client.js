@@ -115,8 +115,15 @@ function loadSearchResults(searchResults) {
 }
 
 function updatePlaylist() {
-    $('#playlist').html('');
-    $.each(videoQueue, function(key, video) {
-        $('#playlist').append('<div class="playlist-item">' + video.snippet.title + '</div>');
+    $.get('/views/playlist-item.hbs', function(source) {
+        $('#playlist').html('');
+
+        var template = Handlebars.compile(source);
+
+        $.each(videoQueue, function(key, video) {
+            var context = { title: video.snippet.title };
+            var html = template(context);
+            $('#playlist').append(html);
+        });
     });
 }
