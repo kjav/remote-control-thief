@@ -45,3 +45,15 @@ hr {
 #chatbox p:nth-child(odd) {
     background-color: #f0f0f0;
 }
+
+#search-container {
+    margin: 12px;
+}
+
+#search-results div {
+    padding: 12px;
+}
+
+#search-results div:nth-child(odd) {
+    background-color: #f0f0f0;
+}
