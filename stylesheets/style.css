@@ -17,6 +17,21 @@ hr {
     border-top: 1px solid #f0f0f0;
 }
 
+#playlist {
+    height: 315px;
+    border: 1px solid #f0f0f0;
+    margin: 12px;
+    overflow-y: scroll;
+}
+
+.playlist-item {
+    padding: 12px;
+}
+
+.playlist-item:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+
 #controls-container {
     display: flex;
 }
