@@ -88,6 +88,11 @@ io.on('connection', function(socket) {
             io.emit('video ended', videoData);
         }
     });
+
+    socket.on('search youtube', function(searchQuery) {
+        var searchString = searchQuery.searchString;
+        searchYoutubeForString(searchString);
+    });
 });
 
 function retrieveVideoInformation(videoID) {
@@ -127,6 +132,10 @@ function emitVideo(videoData) {
 
 function loadDefaultVideo() {
     retrieveVideoInformation('sjCw3-YTffo');
+}
+
+function searchYoutubeForString(searchString) {
+    console.log('A user has searched YouTube for "' + searchString + '"');
 }
 
 function guid() {

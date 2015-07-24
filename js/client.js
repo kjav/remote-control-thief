@@ -69,6 +69,11 @@ $(document).ready(function() {
     $('#pause-video-button').click(function() {
         requestToPauseVideo();
     });
+
+    $('#search-youtube-button').click(function() {
+        var searchQuery = { searchString: $('#search-query-to-send').val() };
+        socket.emit('search youtube', searchQuery);
+    });
 });
 
 function loadNextVideo() {
