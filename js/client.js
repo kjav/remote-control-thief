@@ -101,10 +101,17 @@ function appendMessageToChatbox(message) {
 }
 
 function loadSearchResults(searchResults) {
-    $('#search-results').html('');
-    $.each(searchResults, function(key, searchResult) {
-        $('#search-results').append('<div class="search-result">' + searchResult.snippet.title + '</div>');
-    });
+    $.get('/views/search-result.hbs', function(source) {
+        $('#search-results').html('');
+
+        var template = Handlebars.compile(source);
+
+        $.each(searchResults, function(key, searchResult) {
+            var context = { title: searchResult.snippet.title };
+            var html = template(context);
+            $('#search-results').append(html);
+        });
+    }, 'html');
 }
 
 function updatePlaylist() {
