@@ -74,6 +74,12 @@ $(document).ready(function() {
         var searchQuery = { searchString: $('#search-query-to-send').val() };
         socket.emit('search youtube', searchQuery);
     });
+
+    $('#search-results').on('click', '.add-to-playlist-button', function(e) {
+        var element = $(e.target);
+        var videoData = { id: element.data('video-id') };
+        socket.emit('add video', videoData);
+    });
 });
 
 function loadNextVideo() {
@@ -107,7 +113,10 @@ function loadSearchResults(searchResults) {
         var template = Handlebars.compile(source);
 
         $.each(searchResults, function(key, searchResult) {
-            var context = { title: searchResult.snippet.title };
+            var context = { 
+                title: searchResult.snippet.title,
+                id: searchResult.id.videoId
+            };
             var html = template(context);
             $('#search-results').append(html);
         });
