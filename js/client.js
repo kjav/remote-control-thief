@@ -3,6 +3,8 @@ var videoQueue = [];
 
 var player;
 
+var uniqueID = guid();
+
 var isYouTubeIframeAPIReady = false;
 var hasVideoQueueLoaded = false;
 
@@ -80,6 +82,12 @@ $(document).ready(function() {
         var videoData = { id: element.data('video-id') };
         socket.emit('add video', videoData);
     });
+
+    $('#playlist').on('click', '.vote-to-skip-button', function(e) {
+        var element = $(e.target);
+        var skipData = { uniqueID: element.data('unique-id'), userUniqueID: uniqueID };
+        socket.emit('vote to skip', skipData);
+    });
 });
 
 function loadNextVideo() {
@@ -130,9 +138,19 @@ function updatePlaylist() {
         var template = Handlebars.compile(source);
 
         $.each(videoQueue, function(key, video) {
-            var context = { title: video.snippet.title };
+            var context = { title: video.snippet.title, videoId: video.uniqueID };
             var html = template(context);
             $('#playlist').append(html);
         });
     });
+}
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
 }

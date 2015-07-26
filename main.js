@@ -95,7 +95,35 @@ io.on('connection', function(socket) {
         var searchString = searchQuery.searchString;
         searchYoutubeForString(socket, searchString);
     });
+
+    socket.on('vote to skip', function(voteData) {
+        var videoUniqueID = voteData.uniqueID;
+        var userUniqueID = voteData.userUniqueID;
+        
+        for (var i = 0; i < videos.length; i++) {
+            if (videos[i].uniqueID == videoUniqueID) {
+                var video = videos[i];
+                addToSkipUsers(video, userUniqueID);
+                break;
+            }
+        }
+    });
 });
+
+function addToSkipUsers(video, userID) {
+    var isInSkipUsersAlready = false;
+
+    for (var i = 0; i < video.skipUsers.length; i++) {
+        if (video.skipUsers[i] == userID) {
+            isInSkipUsersAlready = true;
+        }
+    }
+    
+    if (!isInSkipUsersAlready) {
+        video.skipUsers.push(userID);
+        console.log('A user has voted to skip ' + video.snippet.title);
+    }
+}
 
 function retrieveVideoInformation(videoID) {
     var options = {
@@ -147,6 +175,7 @@ function searchYoutubeForString(userSocket, searchString) {
 function addVideoAndReturn(videoData) {
     videoData.uniqueID = guid();
     videoData.timeIntoVideo = 0;
+    videoData.skipUsers = [];
     videos.push(videoData);
     console.log('A video with name ' + videoData.snippet.title + ' has been submitted.');
     return videoData;
