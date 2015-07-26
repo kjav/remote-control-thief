@@ -5,10 +5,10 @@ var https = require('https');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var apiKey = require('./api.json').api_key;
-var users = [];
 var videos = [];
 var timeAtWhichVideoWasMostRecentlyStarted;
 var videoIsPaused = true;
+var numberOfUsers = 0;
 
 app.engine('hbs', expressHbs({extname:'hbs'}));
 app.set('view engine', 'hbs');
@@ -38,6 +38,7 @@ app.get('/watch/and/control', function(req, res) {
 
 io.on('connection', function(socket) {
     console.log('A user has connected.');
+    numberOfUsers++;
 
     if (!videoIsPaused) {
         var currentTime = Math.floor(Date.now() / 1000);
@@ -48,6 +49,7 @@ io.on('connection', function(socket) {
     
     socket.on('disconnect', function() {
         console.log('A user has disconnected.');
+        numberOfUsers--;
     });
 
     socket.on('send message', function(messageData) {
