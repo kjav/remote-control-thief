@@ -40,16 +40,20 @@ io.on('connection', function(socket) {
     console.log('A user has connected.');
     numberOfUsers++;
 
+    io.emit('user connected', { currentNumberOfUsers: numberOfUsers });
+
     if (!videoIsPaused) {
         var currentTime = Math.floor(Date.now() / 1000);
         videos[0].timeIntoVideo += (currentTime - timeAtWhichVideoWasMostRecentlyStarted);
         timeAtWhichVideoWasMostRecentlyStarted = Math.floor(Date.now() / 1000);
     }
-    socket.emit('load video queue', videos);
+
+    socket.emit('initial data sync', { currentPlaylist: videos, currentNumberOfUsers: numberOfUsers });
     
     socket.on('disconnect', function() {
         console.log('A user has disconnected.');
         numberOfUsers--;
+        io.emit('user disconnected', { currentNumberOfUsers: numberOfUsers });
     });
 
     socket.on('send message', function(messageData) {

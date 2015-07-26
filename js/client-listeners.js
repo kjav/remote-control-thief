@@ -2,6 +2,16 @@ socket.on('new message', function(messageData) {
     appendMessageToChatbox(messageData.username + ': ' + messageData.message);
 });
 
+socket.on('user connected', function(connectionData) {
+    appendMessageToChatbox('A user has connected');
+    updateNumberOfUsers(connectionData.currentNumberOfUsers);
+});
+
+socket.on('user disconnected', function(connectionData) {
+    appendMessageToChatbox('A user has disconnected');
+    updateNumberOfUsers(connectionData.currentNumberOfUsers);
+});
+
 socket.on('add video', function(videoData) {
     videoQueue.push(videoData);
     updatePlaylist();
@@ -40,8 +50,10 @@ socket.on('pause video', function(playData) {
     }
 });
 
-socket.on('load video queue', function(videoQueueToLoad) {
-    videoQueue = videoQueueToLoad;
+socket.on('initial data sync', function(initialData) {
+    updateNumberOfUsers(initialData.currentNumberOfUsers);
+
+    videoQueue = initialData.currentPlaylist;
     updatePlaylist();
     hasVideoQueueLoaded = true;
     attemptToLoadFirstVideo();

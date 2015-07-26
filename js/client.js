@@ -8,6 +8,8 @@ var uniqueID = guid();
 var isYouTubeIframeAPIReady = false;
 var hasVideoQueueLoaded = false;
 
+var numberOfUsers = 0;
+
 function onYouTubeIframeAPIReady() {
     isYouTubeIframeAPIReady = true;
     attemptToLoadFirstVideo();
@@ -143,6 +145,11 @@ function updatePlaylist() {
             $('#playlist').append(html);
         });
     });
+}
+
+function updateNumberOfUsers(updatedNumberOfUsers) {
+    numberOfUsers = updatedNumberOfUsers;
+    $('#number-of-users').html(numberOfUsers);
 }
 
 function guid() {
