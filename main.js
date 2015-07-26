@@ -104,6 +104,13 @@ io.on('connection', function(socket) {
             if (videos[i].uniqueID == videoUniqueID) {
                 var video = videos[i];
                 addToSkipUsers(video, userUniqueID);
+
+                if (video.skipUsers.length >= numberOfUsers / 2) {
+                    console.log('The users have voted to skip ' + video.snippet.title);
+                    io.emit('skip video', { videoID: videoUniqueID });
+                    videos.splice(i, 1);
+                }
+
                 break;
             }
         }
@@ -116,6 +123,7 @@ function addToSkipUsers(video, userID) {
     for (var i = 0; i < video.skipUsers.length; i++) {
         if (video.skipUsers[i] == userID) {
             isInSkipUsersAlready = true;
+            break;
         }
     }
     

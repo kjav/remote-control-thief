@@ -7,6 +7,23 @@ socket.on('add video', function(videoData) {
     updatePlaylist();
 });
 
+socket.on('skip video', function(skipData) {
+    var videoID = skipData.videoID;
+
+    for (var i = 0; i < videoQueue.length; i++) {
+        if (videoID == videoQueue[i].uniqueID) {
+            if (i == 0) {
+                loadNextVideo();
+            }
+            else {
+                videoQueue.splice(i, 1);
+            }
+        }
+    }
+
+    updatePlaylist();
+});
+
 socket.on('play video', function(playData) {
     appendMessageToChatbox(playData.username + ' has clicked to play the video.');
 
