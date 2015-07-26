@@ -140,7 +140,7 @@ function updatePlaylist() {
         var template = Handlebars.compile(source);
 
         $.each(videoQueue, function(key, video) {
-            var context = { title: video.snippet.title, videoId: video.uniqueID };
+            var context = { title: video.snippet.title, videoId: video.uniqueID, numberOfSkipUsers: video.skipUsers.length, totalNumberOfUsers: numberOfUsers };
             var html = template(context);
             $('#playlist').append(html);
         });

@@ -133,6 +133,7 @@ function addToSkipUsers(video, userID) {
     
     if (!isInSkipUsersAlready) {
         video.skipUsers.push(userID);
+        io.emit('vote to skip', { videoID: video.uniqueID, newUserID: userID });
         console.log('A user has voted to skip ' + video.snippet.title);
     }
 }

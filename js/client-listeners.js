@@ -17,6 +17,16 @@ socket.on('add video', function(videoData) {
     updatePlaylist();
 });
 
+socket.on('vote to skip', function(skipData) {
+    for (var i = 0; i < videoQueue.length; i++) {
+        if (skipData.videoID == videoQueue[i].uniqueID) {
+            videoQueue[i].skipUsers.push(skipData.newUserID);
+            updatePlaylist();
+            break;
+        }
+    }
+});
+
 socket.on('skip video', function(skipData) {
     var videoID = skipData.videoID;
 
@@ -28,6 +38,7 @@ socket.on('skip video', function(skipData) {
             else {
                 videoQueue.splice(i, 1);
             }
+            break;
         }
     }
 
