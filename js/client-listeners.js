@@ -81,3 +81,7 @@ socket.on('video ended', function(videoData) {
 socket.on('send search results', function(searchResults) {
     loadSearchResults(searchResults);
 });
+
+socket.on('failed add', function(failData) {
+    appendMessageToChatbox('Unfortunately, there was an error adding the video with ID ' + failData.videoID + ' to the playlist. This is usually due to YouTube not allowing the video to be embedded.');
+});

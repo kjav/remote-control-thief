@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('add video', function(videoData) {
-        retrieveVideoInformation(videoData.id);
+        retrieveVideoInformation(socket, videoData.id);
     });
 
     socket.on('play video', function(playData) {
@@ -138,7 +138,7 @@ function addToSkipUsers(video, userID) {
     }
 }
 
-function retrieveVideoInformation(videoID) {
+function retrieveVideoInformation(userSocket, videoID) {
     var options = {
         host: 'www.googleapis.com',
         path: '/youtube/v3/videos?part=snippet&id=' + videoID + '&key=' + apiKey
@@ -153,8 +153,16 @@ function retrieveVideoInformation(videoID) {
 
         response.on('end', function() {
             responseData = JSON.parse(str);
-            var videoData = addVideoAndReturn(responseData.items[0]);
-            emitVideo(videoData);
+            console.log(JSON.stringify(responseData));
+            if (responseData.items.length >= 1) {
+                var videoData = addVideoAndReturn(responseData.items[0]);
+                emitVideo(videoData);
+            }
+            else {
+                if (userSocket != null) {
+                    userSocket.emit('failed add', { videoID: videoID });
+                }
+            }
         });
     }
 
@@ -199,7 +207,7 @@ function emitVideo(videoData) {
 }
 
 function loadDefaultVideo() {
-    retrieveVideoInformation('sjCw3-YTffo');
+    retrieveVideoInformation(null, 'sjCw3-YTffo');
 }
 
 function guid() {
