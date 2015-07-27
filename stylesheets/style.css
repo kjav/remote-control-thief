@@ -37,6 +37,23 @@ hr {
     margin: 12px;
 }
 
+#search-container {
+    margin: 12px;
+}
+
+#search-results div {
+    margin-top: 12px;
+    padding: 12px;
+}
+
+#search-results div:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+
+#video-add-by-id-container {
+    margin: 12px;
+}
+
 #controls {
     width: 100%;
     margin: 12px;
@@ -59,18 +76,5 @@ hr {
 }
 
 #chatbox p:nth-child(odd) {
-    background-color: #f0f0f0;
-}
-
-#search-container {
-    margin: 12px;
-}
-
-#search-results div {
-    margin-top: 12px;
-    padding: 12px;
-}
-
-#search-results div:nth-child(odd) {
     background-color: #f0f0f0;
 }

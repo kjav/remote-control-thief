@@ -50,21 +50,27 @@
 
                 <div id='search-results'>
                 </div>
+
+            </div>
+
+            <hr />
+
+            <div id='video-add-by-id-container'>
+                {{#if control}}
+                    <form id='video-id-form'>
+                        <span class='form-group'>
+                            <label for='video-id-to-send'>Video ID</label>
+                            <input type='text' id='video-id-to-send' />
+                        </span>
+                        <button id='send-video-id-button' class='btn btn-default'>Submit video</button>
+                    </form>
+                {{/if}}
             </div>
 
             <hr />
 
             <div id='controls-container'>
                 <div id='controls'>
-                    {{#if control}}
-                        <form id='video-id-form'>
-                            <div class='form-group'>
-                                <label for='video-id-to-send'>Video ID</label>
-                                <input type='text' id='video-id-to-send' />
-                            </div>
-                            <button id='send-video-id-button' class='btn btn-default'>Submit video</button>
-                        </form>
-                    {{/if}}
                     {{#unless watch}}
                         <button id='pause-video-button' class='btn btn-default'>Pause video</button>
                         <button id='play-video-button' class='btn btn-default'>Play video</button>
