@@ -1,4 +1,4 @@
 <div class="playlist-item">
     {{title}}
-    <button class="vote-to-skip-button" data-unique-id="{{videoId}}">Vote to skip</button> Votes: {{numberOfSkipUsers}}/{{totalNumberOfUsers}}
+    <button class="vote-to-skip-button" data-unique-id="{{videoId}}">Vote to skip</button> {{#if numberOfSkipUsers}}Votes: {{numberOfSkipUsers}}/{{totalNumberOfUsers}}{{/if}}
 </div>
