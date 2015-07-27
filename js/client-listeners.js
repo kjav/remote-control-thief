@@ -15,6 +15,10 @@ socket.on('user disconnected', function(connectionData) {
 socket.on('add video', function(videoData) {
     videoQueue.push(videoData);
     updatePlaylist();
+
+    if (videoQueue.length == 1) {
+        loadVideo();
+    }
 });
 
 socket.on('vote to skip', function(skipData) {
@@ -33,7 +37,8 @@ socket.on('skip video', function(skipData) {
     for (var i = 0; i < videoQueue.length; i++) {
         if (videoID == videoQueue[i].uniqueID) {
             if (i == 0) {
-                loadNextVideo();
+                moveToNextVideo();
+                loadVideo();
             }
             else {
                 videoQueue.splice(i, 1);
@@ -73,7 +78,8 @@ socket.on('initial data sync', function(initialData) {
 socket.on('video ended', function(videoData) {
     if (!isWatchSet) {
         if (videoData.uniqueID == videoQueue[0].uniqueID) {
-            loadNextVideo();
+            moveToNextVideo();
+            loadVideo();
         }
     }
 });

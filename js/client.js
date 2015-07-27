@@ -40,7 +40,8 @@ function onPlayerStateChange(event) {
     }
     else if (event.data == YT.PlayerState.ENDED) {
         emitVideoEnded(videoQueue[0]);
-        loadNextVideo();
+        moveToNextVideo();
+        loadVideo();
     }
 }
 
@@ -92,12 +93,18 @@ $(document).ready(function() {
     });
 });
 
-function loadNextVideo() {
-    videoQueue.shift();
+function moveToNextVideo() {
+    if (videoQueue.length > 0) {
+        videoQueue.shift();
+    }
+}
 
-    if (isWatchSet) {
-        newVideoData = videoQueue[0];
-        player.loadVideoById(newVideoData.id);
+function loadVideo() {
+    if (videoQueue.length > 0) {
+        if (isWatchSet) {
+            newVideoData = videoQueue[0];
+            player.loadVideoById(newVideoData.id);
+        }
     }
 
     updatePlaylist();

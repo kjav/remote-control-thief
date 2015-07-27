@@ -65,33 +65,45 @@ io.on('connection', function(socket) {
     });
 
     socket.on('play video', function(playData) {
-        if (videoIsPaused) {
-            console.log(playData.username + ' has requested to play the video');
-            videoIsPaused = false;
-            timeAtWhichVideoWasMostRecentlyStarted = Math.floor(Date.now() / 1000);
-            io.emit('play video', playData);
-            console.log('A user has clicked to play the video at time ' + timeAtWhichVideoWasMostRecentlyStarted + ' at time ' + videos[0].timeIntoVideo + ' into the video');
+        if (videos.length > 0) {
+            if (videoIsPaused) {
+                console.log(playData.username + ' has requested to play the video');
+                videoIsPaused = false;
+                timeAtWhichVideoWasMostRecentlyStarted = Math.floor(Date.now() / 1000);
+                io.emit('play video', playData);
+                console.log('A user has clicked to play the video at time ' + timeAtWhichVideoWasMostRecentlyStarted + ' at time ' + videos[0].timeIntoVideo + ' into the video');
+            }
         }
     });
 
     socket.on('pause video', function(pauseData) {
-        if (!videoIsPaused) {
-            console.log(pauseData.username + ' has requested to pause the video');
-            var currentTime = Math.floor(Date.now() / 1000);
-            videos[0].timeIntoVideo += (currentTime - timeAtWhichVideoWasMostRecentlyStarted);
-            videoIsPaused = true;
-            io.emit('pause video', pauseData);
-            console.log('A user has clicked to pause the video at time ' + timeAtWhichVideoWasMostRecentlyStarted + ' at time ' + videos[0].timeIntoVideo + ' into the video');
+        if (videos.length > 0) {
+            if (!videoIsPaused) {
+                console.log(pauseData.username + ' has requested to pause the video');
+                var currentTime = Math.floor(Date.now() / 1000);
+                videos[0].timeIntoVideo += (currentTime - timeAtWhichVideoWasMostRecentlyStarted);
+                videoIsPaused = true;
+                io.emit('pause video', pauseData);
+                console.log('A user has clicked to pause the video at time ' + timeAtWhichVideoWasMostRecentlyStarted + ' at time ' + videos[0].timeIntoVideo + ' into the video');
+            }
         }
     });
 
     socket.on('video ended', function(videoData) {
-        if (videos[0].uniqueID == videoData.uniqueID) {
-            videos.shift();
-            videoIsPaused = true;
-            videos[0].timeIntoVideo = 0;
+        if (videos.length > 0) {
+            if (videos[0].uniqueID == videoData.uniqueID) {
+                videos.shift();
+                videoIsPaused = true;
 
-            io.emit('video ended', videoData);
+                if (videos.length > 0) {
+                    videos[0].timeIntoVideo = 0;
+                }
+
+                io.emit('video ended', videoData);
+            }
+        }
+        else {
+            videoIsPaused = true;
         }
     });
 
@@ -153,7 +165,6 @@ function retrieveVideoInformation(userSocket, videoID) {
 
         response.on('end', function() {
             responseData = JSON.parse(str);
-            console.log(JSON.stringify(responseData));
             if (responseData.items.length >= 1) {
                 var videoData = addVideoAndReturn(responseData.items[0]);
                 emitVideo(videoData);
