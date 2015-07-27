@@ -33,36 +33,58 @@
                 </span>
             </div>
 
+            <div id='lobby-information-container'>
+                <p style='clear: both;'>Number of users: <span id='number-of-users'>0</span></p>
+            </div>
+
+            <hr />
+
+            <div id='search-container'>
+                <form>
+                    <span class='form-group'>
+                        <label for='search-query-to-send'>Search YouTube</label>
+                        <input type='text' id='search-query-to-send' />
+                    </span>
+                    <button id='search-youtube-button' class='btn btn-default'>Search YouTube</button>
+                </form>
+
+                <div id='search-results'>
+                </div>
+            </div>
+
             <hr />
 
             <div id='controls-container'>
                 <div id='controls'>
-                    <p>Number of users: <span id='number-of-users'>0</span></p>
                     {{#if control}}
-                        <p>Video ID: <input type='text' id='video-id-to-send' /></p>
-                        <button id='send-video-button'>Submit video</button>
+                        <form id='video-id-form'>
+                            <div class='form-group'>
+                                <label for='video-id-to-send'>Video ID</label>
+                                <input type='text' id='video-id-to-send' />
+                            </div>
+                            <button id='send-video-id-button' class='btn btn-default'>Submit video</button>
+                        </form>
                     {{/if}}
                     {{#unless watch}}
-                        <button id='pause-video-button'>Pause video</button>
-                        <button id='play-video-button'>Play video</button>
+                        <button id='pause-video-button' class='btn btn-default'>Pause video</button>
+                        <button id='play-video-button' class='btn btn-default'>Play video</button>
                     {{/unless}}
-                    <div id='message-preparation'>
-                        <p>Username: <input type='text' id='username' /></p>
-                        <p>Message: <input type='text' id='message-to-send' /></p>
-                        <button id='send-message-button'>Send message</button>
-                    </div>
+                    <form id='message-preparation'>
+                        <div class='form-group'>
+                            <label for='username'>Username</label>
+                            <input type='text' id='username' />
+                        </div>
+                        <div class='form-group'>
+                            <label for='message-to-send'>Message</label>
+                            <input type='text' id='message-to-send' />
+                        </div>
+                        <button id='send-message-button' class='btn btn-default'>Send message</button>
+                    </form>
                 </div>
 
                 <div id='chatbox-container'>
                     <div id='chatbox'>
                     </div>
-                </div>
-            </div>
-
-            <div id='search-container'>
-                <p>Search on YouTube for: <input type='text' id='search-query-to-send' /></p>
-                <button id='search-youtube-button'>Search YouTube</button>
-                <div id='search-results'>
                 </div>
             </div>
         </div>

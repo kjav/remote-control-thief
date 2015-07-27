@@ -18,8 +18,8 @@ function onYouTubeIframeAPIReady() {
 function attemptToLoadFirstVideo() {
     if (isYouTubeIframeAPIReady && hasVideoQueueLoaded && isWatchSet) {
         player = new YT.Player('player', {
-            height: '315',
-            width: '560',
+            height: '390',
+            width: '640',
             playerVar: {
                 'autoplay': 1
             },
@@ -60,11 +60,16 @@ $(document).ready(function() {
     $('#send-message-button').click(function() {
         var messageData = { username: $('#username').val(), message: $('#message-to-send').val() };
         socket.emit('send message', messageData);
+
+        $('#message-to-send').val('');
+        return false;
     });
 
-    $('#send-video-button').click(function() {
+    $('#send-video-id-button').click(function() {
         var videoData = { id: $('#video-id-to-send').val() };
         socket.emit('add video', videoData);
+
+        return false;
     });
 
     $('#play-video-button').click(function() {
@@ -78,6 +83,8 @@ $(document).ready(function() {
     $('#search-youtube-button').click(function() {
         var searchQuery = { searchString: $('#search-query-to-send').val() };
         socket.emit('search youtube', searchQuery);
+
+        return false;
     });
 
     $('#search-results').on('click', '.add-to-playlist-button', function(e) {
