@@ -21,7 +21,11 @@ server.listen(3000, function() {
 });
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/views/choose_mode.html');
+    res.sendFile(__dirname + '/views/index.html');
+});
+
+app.get('/register', function(req, res) {
+    res.sendFile(__dirname + '/views/register.html');
 });
 
 app.get('/watch', function(req, res) {
