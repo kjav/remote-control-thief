@@ -25,15 +25,15 @@ app.get('/', function(req, res) {
 });
 
 app.get('/watch', function(req, res) {
-    res.render('index', { watch: true, control: false });
+    res.render('video-room', { watch: true, control: false });
 });
 
 app.get('/control', function(req, res) {
-    res.render('index', { watch: false, control: true });
+    res.render('video-room', { watch: false, control: true });
 });
 
 app.get('/watch/and/control', function(req, res) {
-    res.render('index', { watch: true, control: true });
+    res.render('video-room', { watch: true, control: true });
 });
 
 io.on('connection', function(socket) {
