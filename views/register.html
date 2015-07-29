@@ -3,6 +3,42 @@
         <title>Remote Control Thief</title>
         <link rel='stylesheet' type='text/css' href='/stylesheets/style.css'>
         <link rel='stylesheet' type='text/css' href='/stylesheets/bootstrap.min.css'>
+        <script src='https://cdn.socket.io/socket.io-1.3.5.js'></script>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+        <script type='text/javascript'>
+            var socket = io();
+
+            $(document).ready(function() {
+                $('#register-button').click(function() {
+                    var username = $('#username').val();
+                    var password = $('#password').val();
+                    var repeatPassword = $('#repeat-password').val();
+
+                    if (password == repeatPassword) {
+                        if (password.length >= 8) {
+                            attemptToCreateUser(username, password);
+                        }
+                        else {
+                            errorWithMessage('Sorry, your password has fewer than 8 characters. Please try again.');
+                        }
+                    }
+                    else {
+                        errorWithMessage('Sorry, the passwords did not match. Please try again.');
+                    }
+
+                    return false;
+                });
+            });
+
+
+            function attemptToCreateUser(username, password) {
+
+            }
+
+            function errorWithMessage(errorMessage) {
+                $('#error-message-box').html(errorMessage);
+            }
+        </script>
     </head>
     <body>
         <div id='container'>
@@ -14,7 +50,7 @@
                     <input type='text' id='username' />
                 </div>
                 <div class='form-group'>
-                    <label for='password'>Password</label>
+                    <label for='password'>Password (must be at least 8 characters)</label>
                     <input type='password' id='password' />
                 </div>
                 <div class='form-group'>
@@ -23,6 +59,12 @@
                 </div>
                 <button id='register-button' class='btn btn-default'>Register</button>
             </form>
+            <div id='error-message-box'>
+                
+            </div>
+            <div id='success-message-box'>
+
+            </div>
         </div>
     </body>
 </html>
